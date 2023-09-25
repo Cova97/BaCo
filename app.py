@@ -18,7 +18,7 @@ class AutomataFinito:
         return estado_actual in self.estado_final
 def main():
     automata = AutomataFinito()
-    cadena = "0000"
+    cadena = input('Dame la cadena a revisar: ')
 
     if automata.validar_cadena(cadena):
         print(f"La cadena '{cadena}' es aceptada por el autómata.")
