@@ -1,6 +1,6 @@
 import re
 #Raúl Badillo Lora y Aldo Cova
-#Analizador lexico del lenguaje BACO
+#Analizador lexico del lenguaje BaCo
 
 def lexer(input_str):
 
