@@ -10,7 +10,7 @@ def lexer(input_str):
     ('DPAREN', r'\)'),
     ('NUMERO', r'-?\d+(\.\d+)?'),
 
-    ('RESERVED',r'PLUS|MINUS|MUL|DIV|EQUALS|ASSIGN|DIF|IF|AND|OR|PRINT|DEFINE'),
+    ('RESERVED',r'(PLUS|MINUS|MUL|DIV|EQUALS|ASSIGN|DIF|IF|AND|OR|PRINT|DEFINE)\s'),
 
     ('IDENTIFIER', r'[a-zA-Z][a-zA-Z0-9]*'),
     ('STRING', r'"[^"]*"'),
@@ -36,7 +36,7 @@ def lexer(input_str):
     return tokens
 
 if __name__=='__main__':
-    input_code = """(DEFINE (factorial n)
+    input_code = """(DEFINE (factorial eMULador)
                     (IF (EQUALS n 0)
                         1
                         (MUL n (factorial (MINUS n 1)))))"""
