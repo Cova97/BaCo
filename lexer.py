@@ -43,8 +43,9 @@ if __name__=='__main__':
         
         for line in file:
             input_code=line
-            tokens.append(lexer(input_code,nl))
+            tokens+=lexer(input_code,nl)
             nl+=1
-
-    for t in tokens:
-        print(t)
+    for i in tokens:
+        print(i)
+    with open ("table.tasi", "w") as file:
+        file.write(str(tokens))
