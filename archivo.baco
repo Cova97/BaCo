@@ -1,0 +1,4 @@
+(DEFINE (factorial eMULador)
+                    (IF (EQUALS n 0)
+                        1
+                        (* n (factorial (MINUS n 1)))))

@@ -2,10 +2,11 @@ import re
 #Raúl Badillo Lora y Aldo Cova
 #Analizador lexico del lenguaje BaCo
 
-def lexer(input_str):
+def lexer(input_str,linea):
 
     TOKENS = [
     ('ESPACIO', r'\s+'),
+
     ('IPAREN', r'\('),
     ('DPAREN', r'\)'),
     ('NUMERO', r'-?\d+(\.\d+)?'),
@@ -14,12 +15,12 @@ def lexer(input_str):
 
     ('IDENTIFIER', r'[a-zA-Z][a-zA-Z0-9]*'),
     ('STRING', r'"[^"]*"'),
-    ('QUOTE', r"'"),
     ('COMMENT', r';.*'),
 ]
 
     tokens = []
     i = 0
+
     while i < len(input_str):
         matched = False
         for token_type, pattern in TOKENS:
@@ -32,14 +33,18 @@ def lexer(input_str):
                 matched = True
                 break
         if not matched:
-            raise ValueError(f"Caracter no identificado: '{input_str[i]}' en posicion: {i}")
+            raise ValueError(f"Caracter no identificado: '{input_str[i]}' en linea: {linea}")
     return tokens
 
 if __name__=='__main__':
-    input_code = """(DEFINE (factorial eMULador)
-                    (IF (EQUALS n 0)
-                        1
-                        (MUL n (factorial (MINUS n 1)))))"""
-    tokens = lexer(input_code)
+    tokens =[]
+    with open ("archivo.baco","r") as file:
+        nl=0
+        
+        for line in file:
+            input_code=line
+            tokens.append(lexer(input_code,nl))
+            nl+=1
+
     for t in tokens:
         print(t)
