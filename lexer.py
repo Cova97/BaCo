@@ -1,4 +1,5 @@
 import re
+import sys
 #Raúl Badillo Lora y Aldo Cova
 #Analizador lexico del lenguaje BaCo
 
@@ -19,6 +20,7 @@ def lexer(input_str,linea):
 ]
 
     tokens = []
+    errors = []
     i = 0
 
     while i < len(input_str):
@@ -33,19 +35,27 @@ def lexer(input_str,linea):
                 matched = True
                 break
         if not matched:
-            raise ValueError(f"Caracter no identificado: '{input_str[i]}' en linea: {linea}")
-    return tokens
+            print(f"Caracter no identificado: '{input_str[i]}' en linea: {linea}")
+            errors.append((input_str[i],linea))
+            i+=1
+    return tokens, errors
 
 if __name__=='__main__':
+    name = sys.argv[1:]
     tokens =[]
-    with open ("archivo.baco","r") as file:
+    errors =[]
+    with open (name[0],"r") as file:
         nl=0
         
         for line in file:
             input_code=line
-            tokens+=lexer(input_code,nl)
+            temp_tokens, temp_errors=lexer(input_code,nl)
+            tokens+=temp_tokens
+            errors+=temp_errors
             nl+=1
     for i in tokens:
         print(i)
     with open ("table.tasi", "w") as file:
         file.write(str(tokens))
+    with open ("error.tarro", "w") as file:
+        file.write(str(errors))
