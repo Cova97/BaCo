@@ -4,7 +4,11 @@ import sys
 #Analizador lexico del lenguaje BaCo
 
 def lexer(input_str,linea):
+    # Esta función analiza una cadena de entrada y devuelve una lista de tokens identificados 
+    # y posibles errores.
 
+    # TOKENS es una lista de tuplas que representan los tipos de tokens y su correspondiente patrón 
+    # de expresión regular.
     TOKENS = [
     ('ESPACIO', r'\s+'),
 
@@ -19,10 +23,11 @@ def lexer(input_str,linea):
     ('COMMENT', r';.*'),
 ]
 
-    tokens = []
-    errors = []
-    i = 0
-
+    tokens = []  # Lista para almacenar los tokens identificados.
+    errors = []  # Lista para almacenar errores.
+    i = 0  # Inicializa un índice para recorrer la cadena de entrada.
+    
+    # Bucle para procesar cada carácter de la cadena.
     while i < len(input_str):
         matched = False
         for token_type, pattern in TOKENS:
