@@ -89,7 +89,7 @@ Para llamar a una función, simplemente escribe su nombre seguido de sus argumen
 
 Ejemplo:
 
-```lisp
+```
 (sumar 3 4)  ; Llama a la función 'sumar' con los argumentos 3 y 4
 ```
 
