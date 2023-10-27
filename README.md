@@ -109,7 +109,7 @@ Este código proporciona un analizador léxico para el lenguaje BaCo. Este anali
 
 ### Autores
 - Raúl Badillo Lora
-- Aldo Cova
+- Aldo Cova Martínez
 
 ### Funciones
 
