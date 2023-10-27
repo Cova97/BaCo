@@ -38,7 +38,7 @@ Cuando el script se ejecuta como programa principal (`__name__=='__main__'`), re
 Para usar este analizador léxico, ejecute el script desde la línea de comandos y proporcione el nombre del archivo que desea analizar como argumento. Por ejemplo:
 
 ```
-python nombre_del_script.py archivo_a_analizar.txt
+python lexer.py archivo_a_analizar.baco
 ```
 
 ### Salida
