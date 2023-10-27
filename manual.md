@@ -2,7 +2,11 @@
 
 ### Introducción:
 
-BaCo es un lenguaje de programación inspirado en Lisp, caracterizado por su uso de paréntesis y su sintaxis de notación de prefijo. Es un lenguaje diseñado para operaciones matemáticas y manipulación de datos.
+BaCo es un lenguaje de programación caracterizado por su uso de paréntesis y su sintaxis de notación de prefijo. Tiene la capacidad de definir funciones, lo cual le da mucha flexibilidad. Es un lenguaje minimalista de propósito general.
+
+Lee archivos de extensión `.baco`. El nombre del lenguaje proviene de las iniciales de sus creadores: **Ba**dillo **Co**va
+
+
 
 ### Sintaxis Básica:
 
@@ -95,6 +99,3 @@ Ejemplo:
 
 Este ejemplo llamará a la función `sumar` definida anteriormente y devolverá el valor 7.
 
-### Conclusión:
-
-Con la capacidad de definir y llamar a funciones, BaCo se convierte en un lenguaje de programación mucho más poderoso y flexible. A través del uso de funciones, los usuarios pueden crear operaciones personalizadas y estructurar su código de manera más modular y reutilizable. ¡Disfruta programando en BaCo!

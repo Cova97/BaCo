@@ -2,7 +2,11 @@
 
 ### Introducción:
 
-BaCo es un lenguaje de programación inspirado en Lisp, caracterizado por su uso de paréntesis y su sintaxis de notación de prefijo. Es un lenguaje diseñado para operaciones matemáticas y manipulación de datos.
+BaCo es un lenguaje de programación caracterizado por su uso de paréntesis y su sintaxis de notación de prefijo. Tiene la capacidad de definir funciones, lo cual le da mucha flexibilidad. Es un lenguaje minimalista de propósito general.
+
+Lee archivos de extensión `.baco`. El nombre del lenguaje proviene de las iniciales de sus creadores: **Ba**dillo **Co**va
+
+
 
 ### Sintaxis Básica:
 
@@ -95,6 +99,59 @@ Ejemplo:
 
 Este ejemplo llamará a la función `sumar` definida anteriormente y devolverá el valor 7.
 
-### Conclusión:
 
-Con la capacidad de definir y llamar a funciones, BaCo se convierte en un lenguaje de programación mucho más poderoso y flexible. A través del uso de funciones, los usuarios pueden crear operaciones personalizadas y estructurar su código de manera más modular y reutilizable. ¡Disfruta programando en BaCo!
+
+## Manual para Desarrolladores del Analizador Léxico BaCo
+
+### Introducción
+
+Este código proporciona un analizador léxico para el lenguaje BaCo. Este analizador léxico identifica y categoriza diferentes tokens en una cadena de entrada basándose en patrones predefinidos.
+
+### Autores
+- Raúl Badillo Lora
+- Aldo Cova
+
+### Funciones
+
+#### `lexer(input_str,linea)`
+Esta función toma una cadena de entrada `input_str` y un número de línea `linea`. Retorna una lista de tokens identificados y una lista de posibles errores encontrados durante el análisis.
+
+- **Parámetros**:
+  - `input_str` (str): Cadena de texto que será analizada.
+  - `linea` (int): Número de línea que está siendo analizada (utilizada para reportar errores).
+
+- **Retorno**: 
+  - Dos listas: `tokens` y `errors`. La lista `tokens` contiene tuplas de tokens identificados. La lista `errors` contiene errores identificados.
+
+#### Lista `TOKENS`
+Contiene las expresiones regulares de los tokens que se reconocen en el lenguaje. Cada token está representado como una tupla de dos elementos, donde el primer elemento es el nombre del token y el segundo elemento es la expresión regular que coincide con el token.
+
+#### Ejecución Principal
+
+Cuando el script se ejecuta como programa principal (`__name__=='__main__'`), realiza lo siguiente:
+
+1. Lee el nombre del archivo desde la línea de comandos.
+2. Abre el archivo y analiza línea por línea utilizando la función `lexer`.
+3. Imprime los tokens identificados en la consola.
+4. Escribe los tokens identificados en un archivo llamado `table.tasi`.
+5. Escribe los errores identificados en un archivo llamado `error.tarro`.
+
+### Uso
+
+Para usar este analizador léxico, ejecute el script desde la línea de comandos y proporcione el nombre del archivo que desea analizar como argumento. Por ejemplo:
+
+```
+python nombre_del_script.py archivo_a_analizar.txt
+```
+
+### Salida
+
+El programa genera dos archivos:
+
+1. `table.tasi`: Contiene una representación de lista de los tokens identificados.
+2. `error.tarro`: Contiene una representación de lista de los errores identificados.
+
+### Notas
+
+- Si un carácter en la entrada no coincide con ninguno de los patrones definidos, se considera un error y se añade a la lista de errores.
+- Los tokens de tipo `ESPACIO` y `COMMENT` son ignorados y no se agregan a la lista de tokens.
