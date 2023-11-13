@@ -1,5 +1,6 @@
 import re
 import sys
+import json
 #Raúl Badillo Lora y Aldo Cova
 #Analizador lexico del lenguaje BaCo
 
@@ -60,7 +61,7 @@ if __name__=='__main__':
             nl+=1
     for i in tokens:
         print(i)
-    with open ("table.tasi", "w") as file:
-        file.write(str(tokens))
-    with open ("error.tarro", "w") as file:
-        file.write(str(errors))
+    with open ("table.json", "w") as file:
+        json.dump(tokens, file)
+    with open ("error.json", "w") as file:
+        json.dump(errors, file)
