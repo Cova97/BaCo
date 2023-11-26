@@ -85,6 +85,8 @@ if __name__=='__main__':
 
     # Parse the tokens to build a syntax tree
     syntax_tree = parser.parse()
+    with open ('syn_tree.json',"w") as file:
+        json.dump(syntax_tree, file)
     print(syntax_tree)
     tree_print(syntax_tree)
         

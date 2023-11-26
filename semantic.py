@@ -1,7 +1,7 @@
 import sys
 import json
 class SemanticAnalyzer:
-    def __init__(self, syntax_tree):
+    def __init__(self, syntax_tree, symbol_table):
         self.syntax_tree = syntax_tree
         self.symbol_table = {}  # You can use this to store variable names and types, if necessary
 
@@ -24,20 +24,24 @@ class SemanticAnalyzer:
     def visit_identifier(self, identifier):
         # Implement rules for identifiers
         # Example: Check if the identifier is declared in the symbol table
-        if identifier not in self.symbol_table:
-            raise NameError(f"Undeclared identifier: {identifier}")
+        # Assuming your list is named `my_list` and `identifier` is the value you're looking for
+        for sublist in self.symbol_table:
+            if sublist[0] == identifier:
+                match_found = True
+                break
+            if not match_found:
+                raise NameError(f"Undeclared identifier: {identifier}")
 
-# ... rest of your existing code ...
+
 
 if __name__=='__main__':
+    with open('syn_tree.json', "r") as file:
+        syntax_tree = json.load(file)
+        
     with open('table.json', "r") as file:
-        lines = json.load(file)
+        symbol_table = json.load(file)
 
-    parser = Parser(lines)
-    syntax_tree = parser.parse()
-    print(syntax_tree)
-    tree_print(syntax_tree)
 
     # Perform semantic analysis
-    semantic_analyzer = SemanticAnalyzer(syntax_tree)
+    semantic_analyzer = SemanticAnalyzer(syntax_tree, symbol_table)
     semantic_analyzer.analyze()

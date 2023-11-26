@@ -1,0 +1,1 @@
+["DEFINE ", ["factorial", "eMULador"], ["IF ", ["EQUALS ", "n", "\"dsfdsafs\""], 1.0, ["n", ["factorial", ["MINUS ", "n", 1.0]]]]]
