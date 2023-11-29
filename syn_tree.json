@@ -1,1 +1,0 @@
-["DEFINE ", ["factorial", "n"], ["IF ", ["EQUALS ", "n", 0.0], 1.0, ["MUL", "n", ["factorial", ["MINUS ", "n", 1.0]]]]]
