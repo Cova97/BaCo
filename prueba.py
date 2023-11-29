@@ -80,13 +80,75 @@ print(ast)
 class SemanticError(Exception):
     pass
 
-math_functions = {'+','-','*','/'}
+
+def infer_type(node, context):
+    if node.type == 'NUMBER':
+        return 'NUMBER'
+    elif node.type == 'STRING':
+        return 'STRING'
+    elif node.type == 'SYMBOL':
+        # In a real implementation, the type would come from the variable's declaration
+        print(context['variables'].get(node.value, 'unknown'))
+        return context['variables'].get(node.value, 'unknown')
+    elif node.type == 'LIST':
+        return analyze_expression_type(node, context)
+    else:
+        return 'unknown'
+
+
+def analyze_expression_type(node, context):
+    if not node.children:
+        raise SemanticError("Empty expression")
+
+    first = node.children[0]
+    if first.type != 'SYMBOL':
+        raise SemanticError("Invalid expression")
+
+    if first.value in ['+', '-', '*', '/', '=']:  # Arithmetic operators
+        return check_arithmetic_operands(node.children[1:], context)
+    if first.value == 'define':
+        return analyze_define_type(node, context)
+    # Add more cases for other operators or functions
+
+
+def analyze_define_type(node, context):
+    if len(node.children) < 3:
+        raise SemanticError("Incorrect number of arguments to 'define'")
+
+    identifier = node.children[1]
+    if identifier.type == 'SYMBOL':  # Variable definition
+        value_node = node.children[2]
+        value_type = infer_type(value_node, context)
+        context['variables'][identifier.value] = value_type
+        return value_type
+    elif identifier.type == 'LIST':  # Function definition
+        # For a function, you might return a 'function' type or more detailed type information
+        return 'function'
+    else:
+        raise SemanticError(
+            "'define' first argument must be a symbol or a list for function definitions")
+
+
+def check_arithmetic_operands(operands, context):
+    if not operands:
+        raise SemanticError("Arithmetic operation requires operands")
+    for operand in operands:
+        operand_type = infer_type(operand, context)
+        if operand_type == 'unknown':
+            context['variables'][operand.value] = 'NUMBER'
+            operand_type = 'NUMBER'
+        if operand_type != 'NUMBER':
+            raise SemanticError(
+                f"Arithmetic operations require numeric operands, found {operand, operand_type}")
+    print(context)
+    return 'NUMBER'
+
 
 def semantic_analysis(node, context=None):
     if context is None:
-        context = {'functions': set(), 'variables': set()}
-
-    if node.type == 'LIST':
+        context = {'functions': set(), 'variables': {}}
+    node.type = infer_type(node, context)
+    if node.type == 'LIST' or node.t:
         if not node.children:
             raise SemanticError("Empty list found")
         # Check the first element to determine the type of expression
@@ -96,10 +158,10 @@ def semantic_analysis(node, context=None):
                 return analyze_define(node, context)
             elif first.value == 'if':
                 return analyze_if(node, context)
-            elif first.value == '=':
-                return analyze_assign(node, context)
-            elif first.value in math_functions:
-                return analyze_math(node, context)
+            # elif first.value == '=':
+            #     return analyze_assign(node, context)
+            # elif first.value in math_functions:
+            #     return analyze_math(node, context)
             elif first.value in context['functions']:
                 return analyze_function_call(node, context)
             else:
@@ -113,11 +175,12 @@ def semantic_analysis(node, context=None):
         if node.value not in context['variables']:
             raise SemanticError(f"Undefined variable: {node.value}")
 
-    elif node.type in ['NUMBER', 'STRING']:
+    elif node.type in ['NUMBER', 'STRING', 'unknown']:
         pass  # No further analysis needed for literals
 
     else:
-        raise SemanticError(f"Unexpected node type: {node.type}")
+        raise SemanticError(f"Unexpected node type: {node, node.type}")
+    print(context)
 
 
 def analyze_define(node, context):
@@ -132,7 +195,7 @@ def analyze_define(node, context):
     if inp.type != 'SYMBOL':
         raise SemanticError(
             f"'define' second argument must be a symbol instead of{identifier.type}")
-    context['variables'].add(inp.value)
+    context['variables'][inp.value] = 'unknown'
     context['functions'].add(identifier.value)
     semantic_analysis(node.children[3], context)
 
@@ -151,19 +214,20 @@ def analyze_assign(node, context):
     if identifier.type != 'SYMBOL':
         raise SemanticError(
             f"'define' first argument must be a symbol instead of{identifier.type}")
-    context['variables'].add(identifier.value)
     semantic_analysis(node.children[2], context)
-    
+    context['variables'][node.children[1].value] = node.children[2].type
+
+
 def analyze_math(node, context):
     if len(node.children) != 3:
         raise SemanticError("Incorrect number of arguments")
     identifier = node.children[1]
     if (node.children[1] != 'NUMBER') or (node.children[2] != 'NUMBER'):
         raise SemanticError(
-            f"function exp{identifier.type}")
+            f"Espera tipo NUMBER en vez de {identifier.type}")
     context['variables'].add(identifier.value)
     semantic_analysis(node.children[2], context)
-    
+
 
 def analyze_function_call(node, context):
     # Additional checks can be added here for specific function calls
@@ -171,9 +235,11 @@ def analyze_function_call(node, context):
         semantic_analysis(arg, context)
 
 
+context = {'functions': set(), 'variables': {}}
 # Perform semantic analysis
 try:
-    semantic_analysis(ast)
+    semantic_analysis(ast, context)
+    print(ast, context)
     print("Semantic analysis completed successfully.")
 except SemanticError as e:
     print(f"Semantic error: {e}")
