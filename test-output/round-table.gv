@@ -1,0 +1,6 @@
+// Arbol sintactico
+digraph {
+	RESERVED
+	"DEFINE "
+	RESERVED -> "DEFINE "
+}
