@@ -1,6 +1,7 @@
 import sys
 import json
 import pickle
+import parse
 class Node:
     def __init__(self, type, value=None, children=None):
         self.type = type
@@ -32,7 +33,13 @@ def parse(tokens):
     ast, _ = parse_expression(0)
     return ast
 
-
+# Funcion para crear el arbol sintactico con parse
+def tree_print(syntax_tree, level=0):
+    print(' ' * level + syntax_tree.type)
+    if syntax_tree.value is not None:
+        print(' ' * (level ) + syntax_tree.value)
+    for child in syntax_tree.children:
+        tree_print(child, level + 1)
     
 if __name__=='__main__':
     #name = sys.argv[1:]
@@ -53,4 +60,7 @@ if __name__=='__main__':
         pickle.dump(ast, file)
     #print(syntax_tree)
     #tree_print(syntax_tree)
-        
+
+    # Generar el arbol sintactivco
+    print("Arbol sintactico")
+    tree_print(ast)
