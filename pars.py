@@ -1,6 +1,10 @@
 import sys
 import json
 import pickle
+import parse
+import networkx as nx
+import matplotlib.pyplot as plt
+
 class Node:
     def __init__(self, type, value=None, children=None):
         self.type = type
@@ -32,7 +36,29 @@ def parse(tokens):
     ast, _ = parse_expression(0)
     return ast
 
+# Funcion para crear el arbol sintactico con parse
+def tree_print(syntax_tree, level=0):
+    print(' ' * level + syntax_tree.type)
+    if syntax_tree.value is not None:
+        print(' ' * (level ) + syntax_tree.value)
+    for child in syntax_tree.children:
+        tree_print(child, level + 1)
 
+# Funcion para crear el arbol sintactico con networkx y matplotlib
+def tree_print_pickle(syntax_tree):
+    G = nx.Graph()
+    G.add_node(syntax_tree.type)
+    if syntax_tree.value is not None:
+        G.add_node(syntax_tree.value)
+        G.add_edge(syntax_tree.type, syntax_tree.value)
+    for child in syntax_tree.children:
+        G.add_edge(syntax_tree.type, child.type)
+        if child.value is not None:
+            G.add_node(child.value)
+            G.add_edge(child.type, child.value)
+        tree_print_pickle(child)
+    nx.draw(G, with_labels=True)
+    plt.show()
     
 if __name__=='__main__':
     #name = sys.argv[1:]
@@ -53,4 +79,11 @@ if __name__=='__main__':
         pickle.dump(ast, file)
     #print(syntax_tree)
     #tree_print(syntax_tree)
-        
+
+    # Generar el arbol sintactico con parse
+    print("Arbol sintactico con parse")
+    tree_print(ast)
+
+    # Generar el arbol sintactico con networkx y matplotlib
+    # print("Arbol sintactico con networkx y matplotlib")
+    # tree_print_pickle(ast)
