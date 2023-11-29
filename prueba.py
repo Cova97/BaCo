@@ -148,7 +148,7 @@ def semantic_analysis(node, context=None):
     if context is None:
         context = {'functions': set(), 'variables': {}}
     node.type = infer_type(node, context)
-    if node.type == 'LIST' or node.t:
+    if node.type == 'LIST':
         if not node.children:
             raise SemanticError("Empty list found")
         # Check the first element to determine the type of expression
@@ -240,6 +240,6 @@ context = {'functions': set(), 'variables': {}}
 try:
     semantic_analysis(ast, context)
     print(ast, context)
-    print("Semantic analysis completed successfully.")
+    print("Analisis semantico completado exitosamente.")
 except SemanticError as e:
     print(f"Semantic error: {e}")
