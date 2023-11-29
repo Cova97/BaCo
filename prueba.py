@@ -80,6 +80,7 @@ print(ast)
 class SemanticError(Exception):
     pass
 
+math_functions = {'+','-','*','/'}
 
 def semantic_analysis(node, context=None):
     if context is None:
@@ -97,6 +98,8 @@ def semantic_analysis(node, context=None):
                 return analyze_if(node, context)
             elif first.value == '=':
                 return analyze_assign(node, context)
+            elif first.value in math_functions:
+                return analyze_math(node, context)
             elif first.value in context['functions']:
                 return analyze_function_call(node, context)
             else:
@@ -150,7 +153,17 @@ def analyze_assign(node, context):
             f"'define' first argument must be a symbol instead of{identifier.type}")
     context['variables'].add(identifier.value)
     semantic_analysis(node.children[2], context)
-
+    
+def analyze_math(node, context):
+    if len(node.children) != 3:
+        raise SemanticError("Incorrect number of arguments")
+    identifier = node.children[1]
+    if (node.children[1] != 'NUMBER') or (node.children[2] != 'NUMBER'):
+        raise SemanticError(
+            f"function exp{identifier.type}")
+    context['variables'].add(identifier.value)
+    semantic_analysis(node.children[2], context)
+    
 
 def analyze_function_call(node, context):
     # Additional checks can be added here for specific function calls
