@@ -17,7 +17,7 @@ def lexer(input_str,linea):
     ('DPAREN', r'\)'),
     ('NUMERO', r'-?\d+(\.\d+)?'),
 
-    ('RESERVED',r'(PLUS|MINUS|MUL|DIV|EQUALS|ASSIGN|DIF|IF|AND|OR|PRINT|DEFINE)\s'),
+    ('IDENTIFIER',r'(PLUS|MINUS|MUL|DIV|EQUALS|ASSIGN|DIF|IF|AND|OR|PRINT|DEFINE)\s'),
 
     ('IDENTIFIER', r'[a-zA-Z][a-zA-Z0-9]*'),
     ('STRING', r'"[^"]*"'),
