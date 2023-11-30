@@ -10,19 +10,17 @@ def actualizar_tasi(symbol_table, valor, nuevo):
             item[0] = nuevo
 
 
-
 def actualizar_arbol(ast, valor, nuevo):
-    if ast.value==valor:
+    if ast.value == valor:
         ast.type = nuevo
-    
+
     for child in ast.children:
         actualizar_arbol(child, valor, nuevo)
-    
-    
-    
+
 
 class SemanticError(Exception):
     pass
+
 
 def analyze(ast):
     def analyze_node(node):
@@ -37,27 +35,28 @@ def analyze(ast):
         first_child = node.children[0]
         print(first_child.value, first_child.type)
         if first_child.type == 'RESERVED':
-            if first_child.value in ['PLUS ','MINUS ','MUL ','DIV ','EQUALS ','ASSIGN ','DIF ','IF ','AND ','OR ']:
+            if first_child.value in ['PLUS ', 'MINUS ', 'MUL ', 'DIV ', 'EQUALS ', 'ASSIGN ', 'DIF ', 'IF ', 'AND ', 'OR ']:
                 analyze_math_operator(node.children)
             if first_child.value == 'DEFINE ':
                 analyze_define(node.children)
-        if first_child.type =='FUNCION':
+        if first_child.type == 'FUNCION':
             analyze_funcion(node.children)
-            
 
     def analyze_math_operator(children):
         print('analizando operador')
-        if len(children) < 3:  
+        if len(children) < 3:
             raise SemanticError("Math operator requires at least two operands")
         for child in children[1:]:
             if child.type != 'NUMERO':
                 if child.type == 'IDENTIFIER':
-                    child.type ='NUMERO'
-                    
-                elif child.type =='LIST':
+                    child.type = 'NUMERO'
+                    actualizar_arbol(child, child.value, 'NUMERO')
+
+                elif child.type == 'LIST':
                     analyze_list(child)
                 else:
-                    raise SemanticError("Math operator requires numeric operands")
+                    raise SemanticError(
+                        "Math operator requires numeric operands")
 
     def analyze_define(children):
         print('analizando DEFINE')
@@ -66,25 +65,25 @@ def analyze(ast):
         if children[1].type != 'IDENTIFIER':
             raise SemanticError("First argument of define must be a symbol")
         children[1].type = 'FUNCION'
+        actualizar_arbol(children[3], children[1].value, 'FUNCION')
         analyze_node(children[3])
-        
-        
+
     def analyze_funcion(children):
         print('analizando funcion')
         if len(children) != 2:
             raise SemanticError("Las funciones requieren un argumento")
-        if children[1].type=='LIST':
+        if children[1].type == 'LIST':
             analyze_list(children[1])
 
     analyze_node(ast)
 
 
-if __name__=='__main__':
-    #ast = Node()
+if __name__ == '__main__':
+    # ast = Node()
     with open('syn_tree.pickle', "rb") as file:
         ast = pickle.load(file)
-    #print(ast)
-        
+    # print(ast)
+
     with open('table.json', "r") as file:
         symbol_table = json.load(file)
 # Perform semantic analysis
