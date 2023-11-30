@@ -1,9 +1,6 @@
 import sys
 import json
 import pickle
-import parse
-import networkx as nx
-import matplotlib.pyplot as plt
 
 class Node:
     def __init__(self, type, value=None, children=None):
