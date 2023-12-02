@@ -2,12 +2,17 @@ import sys
 import json
 import pickle
 <<<<<<< HEAD
+<<<<<<< HEAD
 import networkx as nx
 import matplotlib.pyplot as plt
 =======
 >>>>>>> 6a231a5 (falta actualizar el arbol y tabla de simbolos)
 
 
+=======
+import networkx as nx
+import matplotlib.pyplot as plt
+>>>>>>> 10c23e8 (update)
 
 class Node:
     def __init__(self, type, value=None, children=None):
