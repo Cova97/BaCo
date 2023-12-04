@@ -11,6 +11,9 @@ def actualizar_tasi(symbol_table, valor, nuevo):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0b23dfc (Programa terminado)
 def buscar_tasi(symbol_table, valor):
     for item in symbol_table:
         if item[1] == valor:
@@ -34,6 +37,7 @@ def revisar_arbol(ast, symbol_table):
     for child in ast.children:
         revisar_arbol(child, symbol_table)
 
+<<<<<<< HEAD
 =======
 
 def actualizar_arbol(ast, valor, nuevo):
@@ -46,6 +50,8 @@ def actualizar_arbol(ast, valor, nuevo):
     
     
 >>>>>>> 6a231a5 (falta actualizar el arbol y tabla de simbolos)
+=======
+>>>>>>> 0b23dfc (Programa terminado)
 
 class SemanticError(Exception):
     pass
@@ -65,12 +71,15 @@ def analyze(ast):
         print('analizando lista')
         if not node.children:
             raise SemanticError("Lista Vacía")
+<<<<<<< HEAD
 =======
     def analyze_list(node):
         print('analizando lista')
         if not node.children:
             raise SemanticError("Empty list")
 >>>>>>> 6a231a5 (falta actualizar el arbol y tabla de simbolos)
+=======
+>>>>>>> 0b23dfc (Programa terminado)
 
         first_child = node.children[0]
         print(first_child.value, first_child.type)
@@ -88,6 +97,7 @@ def analyze(ast):
         if len(children) < 3:
             raise SemanticError(
                 "Los operadores requieren al menos dos operandos")
+<<<<<<< HEAD
         for child in children[1:]:
             if child.type != 'NUMERO':
                 if child.type == 'IDENTIFIER':
@@ -112,21 +122,30 @@ def analyze(ast):
         print('analizando operador')
         if len(children) < 3:
             raise SemanticError("Math operator requires at least two operands")
+=======
+>>>>>>> 0b23dfc (Programa terminado)
         for child in children[1:]:
             if child.type != 'NUMERO':
                 if child.type == 'IDENTIFIER':
                     child.type = 'NUMERO'
-                    actualizar_arbol(child, child.value, 'NUMERO')
+                    # actualizar_arbol(child, child.value, 'NUMERO')
+                    actualizar_tasi(symbol_table, child.value, 'NUMERO')
 
                 elif child.type == 'LIST':
                     analyze_list(child)
                 else:
+<<<<<<< HEAD
                     raise SemanticError("Math operator requires numeric operands")
 >>>>>>> 6a231a5 (falta actualizar el arbol y tabla de simbolos)
+=======
+                    raise SemanticError(
+                        "Tipo de operador no valido")
+>>>>>>> 0b23dfc (Programa terminado)
 
     def analyze_define(children):
         print('analizando DEFINE')
         if len(children) != 4:
+<<<<<<< HEAD
 <<<<<<< HEAD
             raise SemanticError("DEFINE requiere al menos dos argumentos")
         if children[1].type != 'IDENTIFIER':
@@ -139,10 +158,15 @@ def analyze(ast):
 
 =======
             raise SemanticError("Define requires three arguments")
+=======
+            raise SemanticError("DEFINE requiere al menos dos argumentos")
+>>>>>>> 0b23dfc (Programa terminado)
         if children[1].type != 'IDENTIFIER':
-            raise SemanticError("First argument of define must be a symbol")
+            raise SemanticError(
+                "Primer argumento de DEFINE debe de ser un identificador")
         children[1].type = 'FUNCION'
-        actualizar_arbol(children[3], children[1].value, 'FUNCION')
+        # actualizar_arbol(children[3], children[1].value, 'FUNCION')
+        actualizar_tasi(symbol_table, children[1].value, 'FUNCION')
         analyze_node(children[3])
         
         
@@ -170,6 +194,7 @@ if __name__ == '__main__':
 
     with open('table.json', "r") as file:
         symbol_table = json.load(file)
+<<<<<<< HEAD
     try:
         analyze(ast)
         # print(ast)
@@ -187,6 +212,11 @@ if __name__=='__main__':
         analyze(ast)
         print(ast)
 >>>>>>> 6a231a5 (falta actualizar el arbol y tabla de simbolos)
+=======
+    try:
+        analyze(ast)
+        # print(ast)
+>>>>>>> 0b23dfc (Programa terminado)
         print("Analisis semantico completado exitosamente.")
         print(symbol_table)
         revisar_arbol(ast, symbol_table)

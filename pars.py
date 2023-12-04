@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 >>>>>>> 6a231a5 (falta actualizar el arbol y tabla de simbolos)
 
 
+
 class Node:
     def __init__(self, type, value=None, children=None):
         self.type = type
