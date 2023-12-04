@@ -10,12 +10,28 @@ def actualizar_tasi(symbol_table, valor, nuevo):
             item[0] = nuevo
 
 
+def buscar_tasi(symbol_table, valor):
+    for item in symbol_table:
+        if item[1] == valor:
+            return item[0]
+    return None
+
+
 def actualizar_arbol(ast, valor, nuevo):
     if ast.value == valor:
         ast.type = nuevo
 
     for child in ast.children:
         actualizar_arbol(child, valor, nuevo)
+
+
+def revisar_arbol(ast, symbol_table):
+    tipo = buscar_tasi(symbol_table, ast.value)
+    if tipo != None:
+        ast.type = tipo
+
+    for child in ast.children:
+        revisar_arbol(child, symbol_table)
 
 
 class SemanticError(Exception):
@@ -30,7 +46,7 @@ def analyze(ast):
     def analyze_list(node):
         print('analizando lista')
         if not node.children:
-            raise SemanticError("Empty list")
+            raise SemanticError("Lista Vacía")
 
         first_child = node.children[0]
         print(first_child.value, first_child.type)
@@ -45,27 +61,31 @@ def analyze(ast):
     def analyze_math_operator(children):
         print('analizando operador')
         if len(children) < 3:
-            raise SemanticError("Math operator requires at least two operands")
+            raise SemanticError(
+                "Los operadores requieren al menos dos operandos")
         for child in children[1:]:
             if child.type != 'NUMERO':
                 if child.type == 'IDENTIFIER':
                     child.type = 'NUMERO'
-                    actualizar_arbol(child, child.value, 'NUMERO')
+                    # actualizar_arbol(child, child.value, 'NUMERO')
+                    actualizar_tasi(symbol_table, child.value, 'NUMERO')
 
                 elif child.type == 'LIST':
                     analyze_list(child)
                 else:
                     raise SemanticError(
-                        "Math operator requires numeric operands")
+                        "Tipo de operador no valido")
 
     def analyze_define(children):
         print('analizando DEFINE')
         if len(children) != 4:
-            raise SemanticError("Define requires three arguments")
+            raise SemanticError("DEFINE requiere al menos dos argumentos")
         if children[1].type != 'IDENTIFIER':
-            raise SemanticError("First argument of define must be a symbol")
+            raise SemanticError(
+                "Primer argumento de DEFINE debe de ser un identificador")
         children[1].type = 'FUNCION'
-        actualizar_arbol(children[3], children[1].value, 'FUNCION')
+        # actualizar_arbol(children[3], children[1].value, 'FUNCION')
+        actualizar_tasi(symbol_table, children[1].value, 'FUNCION')
         analyze_node(children[3])
 
     def analyze_funcion(children):
@@ -86,10 +106,12 @@ if __name__ == '__main__':
 
     with open('table.json', "r") as file:
         symbol_table = json.load(file)
-# Perform semantic analysis
     try:
         analyze(ast)
-        print(ast)
+        # print(ast)
         print("Analisis semantico completado exitosamente.")
+        print(symbol_table)
+        revisar_arbol(ast, symbol_table)
+        print(ast)
     except SemanticError as e:
-        print(f"Semantic error: {e}")
+        print(f"Error semantico: {e}")
